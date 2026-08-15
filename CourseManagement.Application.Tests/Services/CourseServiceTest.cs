@@ -198,7 +198,7 @@ public class CourseServiceTest
         var result = await _courseService.DeleteAsync(courseId);
 
         // Assert
-        result.Should().Be(false);
+        result.Should().BeFalse();
         _courseRepositoryMock.Verify(repo => repo.GetByIdAsync(courseId), Times.Once);
         _courseRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Course>()), Times.Never);
     }
@@ -218,7 +218,7 @@ public class CourseServiceTest
         var result = await _courseService.DeleteAsync(course.Id);
 
         // Assert
-        result.Should().Be(true);
+        result.Should().BeTrue();
         _courseRepositoryMock.Verify(repo => repo.GetByIdAsync(course.Id), Times.Once);
         _courseRepositoryMock.Verify(repo => repo.DeleteAsync(course), Times.Once);
 
