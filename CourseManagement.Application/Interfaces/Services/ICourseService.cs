@@ -15,5 +15,5 @@ public interface ICourseService
 
     Task<CourseResponseDto?> UpdateAsync(int id, UpdateCourseRequestDto updateCourseRequestDto);
 
-    Task<bool?> DeleteAsync(int id);
+    Task<bool> DeleteAsync(int id);
 }

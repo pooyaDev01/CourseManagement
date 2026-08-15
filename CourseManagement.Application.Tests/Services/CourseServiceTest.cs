@@ -185,5 +185,44 @@ public class CourseServiceTest
         _courseRepositoryMock.Verify(repo => repo.UpdateAsync(course), Times.Once);
     }
 
+    [Fact]
+    public async Task DeleteAsync_Should_ReturnFalse_WhenCourseDoesNotExist()
+    {
+        // Arrange
+        var courseId = _fixture.Create<int>();
+
+        _courseRepositoryMock.Setup(repo => repo.GetByIdAsync(courseId))
+            .ReturnsAsync((Course?) null);
+
+        // Act
+        var result = await _courseService.DeleteAsync(courseId);
+
+        // Assert
+        result.Should().Be(false);
+        _courseRepositoryMock.Verify(repo => repo.GetByIdAsync(courseId), Times.Once);
+        _courseRepositoryMock.Verify(repo => repo.DeleteAsync(It.IsAny<Course>()), Times.Never);
+    }
+
+    [Fact]
+    public async Task DeleteAsync_Should_ReturnTrue_WhenCourseExist()
+    {
+        // Arrange
+        var course = _fixture.Build<Course>()
+            .Without(c => c.Lessons)
+            .Create();
+
+        _courseRepositoryMock.Setup(repo => repo.GetByIdAsync(course.Id))
+            .ReturnsAsync(course);
+
+        // Act
+        var result = await _courseService.DeleteAsync(course.Id);
+
+        // Assert
+        result.Should().Be(true);
+        _courseRepositoryMock.Verify(repo => repo.GetByIdAsync(course.Id), Times.Once);
+        _courseRepositoryMock.Verify(repo => repo.DeleteAsync(course), Times.Once);
+
+    }
+
 }
 

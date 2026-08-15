@@ -31,9 +31,18 @@ public class CourseService : ICourseService
         return response;
     }
 
-    public Task<bool?> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id)
     {
-        throw new NotImplementedException();
+        var course = await _courseRepository.GetByIdAsync(id);
+
+        if (course is null)
+        {
+            return false;
+        }
+
+        await _courseRepository.DeleteAsync(course);
+
+        return true;
     }
 
     public async Task<IEnumerable<CourseResponseDto>> GetAllAsync()
