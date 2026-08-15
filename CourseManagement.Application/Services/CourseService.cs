@@ -2,6 +2,7 @@
 using CourseManagement.Application.DTOs.Course;
 using CourseManagement.Application.Interfaces.Repositories;
 using CourseManagement.Application.Interfaces.Services;
+using CourseManagement.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,12 +20,18 @@ public class CourseService : ICourseService
         _mapper = mapper;
     }
 
-    public Task<CourseResponseDto> AddAsync(AddCourseRequestDto courseRequestDto)
+    public async Task<CourseResponseDto> AddAsync(AddCourseRequestDto courseRequestDto)
     {
-        throw new NotImplementedException();
+        var person = _mapper.Map<Course>(courseRequestDto);
+
+        var course = await _courseRepository.AddAsync(person);
+
+        var response = _mapper.Map<CourseResponseDto>(course);
+
+        return response;
     }
 
-    public Task<bool> DeleteAsync(int id)
+    public Task<bool?> DeleteAsync(int id)
     {
         throw new NotImplementedException();
     }
@@ -48,9 +55,20 @@ public class CourseService : ICourseService
         return _mapper.Map<CourseResponseDto>(course);
     }
 
-    public Task<CourseResponseDto> UpdateAsync(int id, UpdateCourseRequestDto updateCourseRequestDto)
+    public async Task<CourseResponseDto?> UpdateAsync(int id, UpdateCourseRequestDto updateCourseRequestDto)
     {
-        throw new NotImplementedException();
+        var course = await _courseRepository.GetByIdAsync(id);
+
+        if (course is null)
+        {
+            return null;
+        }
+
+        _mapper.Map(updateCourseRequestDto, course); // (Source, Destination) this mapping overload wont create the new refrence
+
+        await _courseRepository.UpdateAsync(course);
+
+        return _mapper.Map<CourseResponseDto>(course); // <Destination>(Source) this mapping overload will create the new refrence
     }
 }
 
