@@ -1,15 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CourseManagement.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CourseManagement.Entities;
+namespace CourseManagement.Infrastructure.Data;
 
-    public class ApplicationDbContext : DbContext
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
-    {
-        
+
     }
 
     public DbSet<Course> Courses { get; set; }
@@ -30,3 +32,4 @@ namespace CourseManagement.Entities;
             .HasPrecision(18, 2);
     }
 }
+

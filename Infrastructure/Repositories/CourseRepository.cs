@@ -1,5 +1,6 @@
 ﻿using CourseManagement.Application.Interfaces.Repositories;
 using CourseManagement.Entities;
+using CourseManagement.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ namespace CourseManagement.Infrastructure.Repositories;
 
 public class CourseRepository : ICourseRepository
 {
-    private readonly ApplicationDbContext _context;
+    private readonly AppDbContext _context;
 
-    public CourseRepository(ApplicationDbContext context)
+    public CourseRepository(AppDbContext context)
     {
         _context = context;
     }
