@@ -3,6 +3,7 @@
   <Project Path="CourseManagement.Application.Tests/CourseManagement.Application.Tests.csproj" />
   <Project Path="CourseManagement.Application/CourseManagement.Application.csproj" />
   <Project Path="CourseManagement.Entities/CourseManagement.Entities.csproj" />
+  <Project Path="CourseManagement.Integrations.Tests/CourseManagement.Integrations.Tests.csproj" Id="5b0c74cb-fbca-40de-915d-cb50d2336691" />
   <Project Path="CourseManagement/CourseManagement.Api.csproj" />
   <Project Path="Infrastructure/CourseManagement.Infrastructure.csproj" />
 </Solution>
