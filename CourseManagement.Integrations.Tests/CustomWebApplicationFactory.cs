@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
 using System;
@@ -12,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 namespace CourseManagement.Integrations.Tests;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
+    private string _databaseName = "TestDb_" + Guid.NewGuid().ToString("N");
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         // Set environment FIRST, before base.ConfigureWebHost
@@ -40,12 +42,24 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
                 services.Remove(baseDbContextOptionsDescriptor);
             }
 
-            // Now add the InMemory database configuration
+            // Now add the InMemory database configuration with persistent name
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("TestDb_");
+                options.UseInMemoryDatabase(_databaseName);
             });
         });
     }
-}
 
+    /// <summary>
+    /// Resets the InMemory database for a fresh test. Call this in your test's Arrange section.
+    /// </summary>
+    public async Task ResetDatabaseAsync()
+    {
+        using (var scope = Services.CreateScope())
+        {
+            var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            await dbContext.Database.EnsureDeletedAsync();
+            await dbContext.Database.EnsureCreatedAsync();
+        }
+    }
+}
