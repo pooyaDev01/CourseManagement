@@ -12,16 +12,27 @@ namespace CourseManagement.Application.Services;
 public class LessonService : ILessonService
 {
     private readonly ILessonRepository _lessonRepository;
+    private readonly ICourseRepository _courseRepository;
     private readonly IMapper _mapper;
 
-    public LessonService(ILessonRepository lessonRepository, IMapper mapper)
+    public LessonService(ILessonRepository lessonRepository, ICourseRepository courseRepository, IMapper mapper)
     {
         _lessonRepository = lessonRepository;
+        _courseRepository = courseRepository;
         _mapper = mapper;
     }
 
-    public async Task<LessonResponseDto> AddAsync(AddLessonRequestDto lessonRequestDto)
+    public async Task<LessonResponseDto?> AddAsync(AddLessonRequestDto lessonRequestDto)
     {
+        var dtoCourseId = lessonRequestDto.CourseId;
+
+        var check_course_existence = await _courseRepository.GetByIdAsync(dtoCourseId);
+
+        if (check_course_existence == null)
+        {
+            return null;
+        }
+
         var lesson = _mapper.Map<Lesson>(lessonRequestDto);
 
         var createdLesson = await _lessonRepository.AddAsync(lesson);

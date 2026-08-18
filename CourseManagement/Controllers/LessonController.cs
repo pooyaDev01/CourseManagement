@@ -42,7 +42,12 @@ public class LessonController : ControllerBase
     {
         var createdLesson = await _lessonService.AddAsync(addLessonRequestDto);
 
-        return CreatedAtAction(nameof(GetById), new { id = createdLesson.Id }, createdLesson);
+        if (createdLesson is null)
+        {
+            return NotFound("invalid courseId");
+        }
+
+        return CreatedAtAction(nameof(GetById), new { id = createdLesson!.Id }, createdLesson);
     }
 
     [HttpPut("{id:int}")]
