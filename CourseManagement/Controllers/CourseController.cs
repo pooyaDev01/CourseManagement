@@ -17,7 +17,7 @@ public class CourseController : ControllerBase
         _courseService = courseService;
     }
 
-    [HttpGet("{id : int}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<CourseResponseDto>> GetById([FromRoute]int id)
     {
         var course =  await _courseService.GetByIdAsync(id);
@@ -46,7 +46,7 @@ public class CourseController : ControllerBase
          return CreatedAtAction(nameof(GetById), new {id = createdCourse.Id}, createdCourse );
     }
 
-    [HttpPut("{id : int}")]
+    [HttpPut("{id:int}")]
     public async Task<ActionResult<CourseResponseDto>> Update([FromRoute] int id ,[FromForm] UpdateCourseRequestDto dto)
     {
         var updatedCourse = await _courseService.UpdateAsync(id, dto);
