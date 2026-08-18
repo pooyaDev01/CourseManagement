@@ -28,4 +28,8 @@
     <ProjectReference Include="..\Infrastructure\CourseManagement.Infrastructure.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="CourseManagement.Integrations.Tests"/>
+	</ItemGroup>
+	
 </Project>

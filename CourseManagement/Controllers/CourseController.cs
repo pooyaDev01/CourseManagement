@@ -17,7 +17,7 @@ public class CourseController : ControllerBase
         _courseService = courseService;
     }
 
-    [HttpGet("{id : int}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<CourseResponseDto>> GetById([FromRoute]int id)
     {
         var course =  await _courseService.GetByIdAsync(id);
@@ -39,15 +39,15 @@ public class CourseController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CourseResponseDto>> Add([FromForm] AddCourseRequestDto dto)
+    public async Task<ActionResult<CourseResponseDto>> Add([FromBody] AddCourseRequestDto dto)
     {
         var createdCourse = await _courseService.AddAsync(dto);
 
          return CreatedAtAction(nameof(GetById), new {id = createdCourse.Id}, createdCourse );
     }
 
-    [HttpPut("{id : int}")]
-    public async Task<ActionResult<CourseResponseDto>> Update([FromRoute] int id ,[FromForm] UpdateCourseRequestDto dto)
+    [HttpPut("{id:int}")]
+    public async Task<ActionResult<CourseResponseDto>> Update([FromRoute] int id ,[FromBody] UpdateCourseRequestDto dto)
     {
         var updatedCourse = await _courseService.UpdateAsync(id, dto);
 
@@ -59,7 +59,7 @@ public class CourseController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult<CourseResponseDto>> Delete([FromRoute] int id)
     {
         var deletedCourse = await _courseService.DeleteAsync(id);

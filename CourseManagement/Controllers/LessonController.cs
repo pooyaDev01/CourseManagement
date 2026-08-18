@@ -24,7 +24,7 @@ public class LessonController : ControllerBase
         return Ok(lessons);
     }
 
-    [HttpGet("{id :int}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult<LessonResponseDto>> GetById(int id)
     {
         var lesson = await _lessonService.GetByIdAsync(id);
@@ -45,7 +45,7 @@ public class LessonController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = createdLesson.Id }, createdLesson);
     }
 
-    [HttpPut("{id :int}")]
+    [HttpPut("{id:int}")]
     public async Task<ActionResult<LessonResponseDto>> Update([FromRoute] int id, [FromBody] UpdateLessonRequestDto updateLessonRequestDto)
     {
         var updatedLesson = await _lessonService.UpdateAsync(id, updateLessonRequestDto);
@@ -58,7 +58,7 @@ public class LessonController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete("{id :int}")]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult<LessonResponseDto>> Delete([FromRoute] int id)
     {
         var deletedCourse = await _lessonService.DeleteAsync(id);
