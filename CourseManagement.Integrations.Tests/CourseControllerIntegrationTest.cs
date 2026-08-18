@@ -253,5 +253,60 @@ public class CourseControllerIntegrationTest : IClassFixture<CustomWebApplicatio
         responseMessage.IsSuccessStatusCode.Should().BeFalse();
         responseMessage.StatusCode.Should().Be(HttpStatusCode.NotFound);
     }
+
+    [Fact]
+    public async Task Delete_ShouldDeleteSuccessfully_WhenCourseExists()
+    {
+        // Arrange - Reset database for fresh test
+        await _factory.ResetDatabaseAsync();
+
+        var createRequest = new AddCourseRequestDto
+        {
+            Title = "create course title",
+            Description = "create course description",
+            Price = 100
+        };
+
+        var createResponse = await _client.PostAsJsonAsync("api/course", createRequest);
+
+        var getAll1 = await _client.GetAsync("api/course");
+
+        var createdJson = createResponse.Content.ReadFromJsonAsync<CourseResponseDto>();
+
+        var id = createdJson.Id;
+
+        // Log
+        var getContent1 = await getAll1.Content.ReadAsStringAsync();
+        _output.WriteLine("Get Content1: " + getContent1);
+
+        // Act
+        var responseMessage = await _client.DeleteAsync($"api/course/{id}");
+
+        var getAll2 = await _client.GetAsync("api/course");
+        var getContent2 = await getAll2.Content.ReadAsStringAsync();
+        _output.WriteLine("Get Content2: " + getContent2);
+
+        // Assert
+        responseMessage.IsSuccessStatusCode.Should().BeTrue();
+        responseMessage.StatusCode.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Fact]
+    public async Task Delete_ShouldReturnNotFound_WhenCourseDoesNotExist()
+    {
+        // Arrange - Reset database for fresh test
+        await _factory.ResetDatabaseAsync();
+
+        int id = 1;
+
+        // Act
+        var responseMessage = await _client.DeleteAsync($"api/course/{id}");
+
+
+        //Assert
+        responseMessage.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        responseMessage.IsSuccessStatusCode.Should().BeFalse();
+
+    }
 }
 
