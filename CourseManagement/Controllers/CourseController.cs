@@ -39,7 +39,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<CourseResponseDto>> Add([FromForm] AddCourseRequestDto dto)
+    public async Task<ActionResult<CourseResponseDto>> Add([FromBody] AddCourseRequestDto dto)
     {
         var createdCourse = await _courseService.AddAsync(dto);
 
@@ -47,7 +47,7 @@ public class CourseController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task<ActionResult<CourseResponseDto>> Update([FromRoute] int id ,[FromForm] UpdateCourseRequestDto dto)
+    public async Task<ActionResult<CourseResponseDto>> Update([FromRoute] int id ,[FromBody] UpdateCourseRequestDto dto)
     {
         var updatedCourse = await _courseService.UpdateAsync(id, dto);
 
