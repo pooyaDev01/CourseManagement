@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Net.Http;
+using FluentAssertions;
 
 namespace CourseManagement.Integrations.Tests;
 public class CourseControllerIntegrationTest : IClassFixture<CustomWebApplicationFactory>
@@ -18,8 +19,10 @@ public class CourseControllerIntegrationTest : IClassFixture<CustomWebApplicatio
         // Arrange
 
         // Act
+        HttpResponseMessage responseMessage = await _client.GetAsync("/api/course");
 
         // Assert
+        responseMessage.Should().NotBeNull();
     }
 }
 

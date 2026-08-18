@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using CourseManagement.Infrastructure.Data;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace CourseManagement.Integrations.Tests;
 public class CustomWebApplicationFactory : WebApplicationFactory<Program>
@@ -15,21 +16,30 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         base.ConfigureWebHost(builder);
 
-        builder.UseEnvironment("Test");
-
         builder.ConfigureServices(services =>
         {
-            var descripter = services.SingleOrDefault(temp => temp.ServiceType ==
-            typeof(DbContextOptions<AppDbContext>));
+            // Remove the DbContextOptions added in Program.cs
+            var dbContextOptionsDescriptor = services.FirstOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
 
-            if (descripter != null)
+            if (dbContextOptionsDescriptor != null)
             {
-                services.Remove(descripter);
+                services.Remove(dbContextOptionsDescriptor);
             }
 
+            // Also try to remove DbContextOptions (base class) if it was registered
+            var baseDbContextOptionsDescriptor = services.FirstOrDefault(
+                d => d.ServiceType == typeof(DbContextOptions));
+
+            if (baseDbContextOptionsDescriptor != null)
+            {
+                services.Remove(baseDbContextOptionsDescriptor);
+            }
+
+            // Now add the InMemory database configuration
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseInMemoryDatabase("DatabaseForTesting"); //it means this ef-core in memory, everytime executes for testing, it will regenerate the new and empty databse for integration testing
+                options.UseInMemoryDatabase("TestDb_");
             });
         });
     }
