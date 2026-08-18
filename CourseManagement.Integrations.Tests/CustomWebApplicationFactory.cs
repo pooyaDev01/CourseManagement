@@ -14,11 +14,15 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        // Set environment FIRST, before base.ConfigureWebHost
+        builder.UseEnvironment("Test");
+
+        // Now call base which will run Program.cs with "Test" environment
         base.ConfigureWebHost(builder);
 
         builder.ConfigureServices(services =>
         {
-            // Remove the DbContextOptions added in Program.cs
+            // Remove any leftover SqlServer DbContextOptions
             var dbContextOptionsDescriptor = services.FirstOrDefault(
                 d => d.ServiceType == typeof(DbContextOptions<AppDbContext>));
 

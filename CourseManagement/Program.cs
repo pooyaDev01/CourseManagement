@@ -14,10 +14,15 @@ builder.Services.AddControllers();
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+// Only register SqlServer DbContext if NOT in Test environment
+// Test environment will register InMemory in CustomWebApplicationFactory
+if (!builder.Environment.IsEnvironment("Test"))
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
+}
 
 builder.Services.AddScoped<ICourseRepository,CourseRepository>();
 builder.Services.AddScoped<ILessonRepository,LessonRepository>();
