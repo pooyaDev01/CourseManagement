@@ -59,7 +59,7 @@ public class CourseController : ControllerBase
         return NoContent();
     }
 
-    [HttpDelete]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult<CourseResponseDto>> Delete([FromRoute] int id)
     {
         var deletedCourse = await _courseService.DeleteAsync(id);
