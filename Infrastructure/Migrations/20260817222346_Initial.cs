@@ -32,7 +32,7 @@ namespace CourseManagement.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    DurationInMinutes = table.Column<int>(type: "int", maxLength: 1000, nullable: false),
+                    DurationInMinutes = table.Column<int>(type: "int", nullable: false),
                     CourseId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

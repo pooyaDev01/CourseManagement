@@ -25,7 +25,7 @@ public class LessonController : ControllerBase
     }
 
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<LessonResponseDto>> GetById(int id)
+    public async Task<ActionResult<LessonResponseDto>> GetById([FromRoute]int id)
     {
         var lesson = await _lessonService.GetByIdAsync(id);
 

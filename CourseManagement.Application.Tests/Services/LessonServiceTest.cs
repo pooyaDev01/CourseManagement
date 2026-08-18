@@ -18,6 +18,7 @@ namespace CourseManagement.Application.Tests.Services;
 public class LessonServiceTest
 {
     private readonly Mock<ILessonRepository> _lessonRepositoryMock;
+    private readonly Mock<ICourseRepository> _courseRepositoryMock;
     private readonly LessonService _lessonService;
     private readonly IMapper _mapper;
     private readonly Fixture _fixture;
@@ -25,6 +26,8 @@ public class LessonServiceTest
     public LessonServiceTest()
     {
         _lessonRepositoryMock = new Mock<ILessonRepository>();
+
+        _courseRepositoryMock = new Mock<ICourseRepository>();
 
         MapperConfiguration mapConfig = new MapperConfiguration(cfg =>
         {
@@ -34,7 +37,7 @@ public class LessonServiceTest
 
         _mapper = mapConfig.CreateMapper();
 
-        _lessonService = new LessonService(_lessonRepositoryMock.Object, _mapper);
+        _lessonService = new LessonService(_lessonRepositoryMock.Object, _courseRepositoryMock.Object, _mapper);
 
         _fixture = new Fixture();
     }

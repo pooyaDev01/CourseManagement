@@ -9,7 +9,6 @@ public class AddLessonRequestDto
     [Required]
     [MaxLength(200)]
     public string Title { get; set; } = string.Empty;
-    [MaxLength(1000)]
 
     [Range(1, 600)]
     public int DurationInMinutes { get; set; }
